@@ -3,23 +3,21 @@ package com.example.demo.service;
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     @Override
-    @Transactional
     public Book save(Book book) {
         return bookRepository.save(book);
     }
 
     @Override
-    public List findAll() {
+    public List<Book> findAll() {
         return bookRepository.findAll();
     }
 }
