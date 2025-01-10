@@ -1,9 +1,9 @@
 package com.example.demo.repository;
 
 import com.example.demo.exception.DataProcessingException;
-import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.Book;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,11 +39,10 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Book getBookById(long id) {
+    public Optional<Book> findBookById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Book.class, id);
-        } catch (Exception e) {
-            throw new EntityNotFoundException("Can't get book by id " + id, e);
+            Book book = session.get(Book.class, id);
+            return Optional.ofNullable(book);
         }
     }
 
@@ -58,3 +57,4 @@ public class BookRepositoryImpl implements BookRepository {
         }
     }
 }
+
