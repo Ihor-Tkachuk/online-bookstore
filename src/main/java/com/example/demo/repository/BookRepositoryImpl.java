@@ -43,6 +43,8 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             Book book = session.get(Book.class, id);
             return Optional.ofNullable(book);
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get book by id " + id, e);
         }
     }
 
@@ -57,4 +59,5 @@ public class BookRepositoryImpl implements BookRepository {
         }
     }
 }
+
 
