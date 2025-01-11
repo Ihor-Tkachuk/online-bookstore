@@ -12,3 +12,4 @@ public interface BookMapper {
 
     Book toModel(CreateBookRequestDto requestDto);
 }
+
