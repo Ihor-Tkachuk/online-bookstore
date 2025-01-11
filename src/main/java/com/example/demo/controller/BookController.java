@@ -37,6 +37,3 @@ public class BookController {
         return bookService.save(requestDto);
     }
 }
-
-
-
