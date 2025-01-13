@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.exception.DataProcessingException;
 import com.example.demo.model.Book;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,7 +39,17 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> findAll() {
+    public Optional<Book> findBookById(long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Book book = session.get(Book.class, id);
+            return Optional.ofNullable(book);
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get book by id " + id, e);
+        }
+    }
+
+    @Override
+    public List<Book> getAll() {
         try (Session session = sessionFactory.openSession()) {
             String hql = "FROM Book";
             Query<Book> query = session.createQuery(hql, Book.class);
