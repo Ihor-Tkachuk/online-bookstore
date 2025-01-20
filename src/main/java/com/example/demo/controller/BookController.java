@@ -39,13 +39,12 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public BookDto updateBook(@PathVariable Long id, @RequestBody CreateBookRequestDto requestDto) {
         return bookService.updateBook(id, requestDto);
     }
