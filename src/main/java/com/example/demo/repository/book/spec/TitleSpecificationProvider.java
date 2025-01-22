@@ -2,7 +2,7 @@ package com.example.demo.repository.book.spec;
 
 import com.example.demo.model.Book;
 import com.example.demo.repository.SpecificationProvider;
-import java.util.Arrays;
+import com.example.demo.repository.book.BookConstants;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 public class TitleSpecificationProvider implements SpecificationProvider<Book> {
     @Override
     public String getKey() {
-        return "title";
+        return BookConstants.TITLE;
     }
 
+    @Override
     public Specification<Book> getSpecification(String[] params) {
-        return (root, query, criteriaBuilder) -> root.get("title").in(Arrays.stream(params)
-                .toArray());
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(root.get(BookConstants.TITLE), "%" + params[0] + "%");
     }
 }
