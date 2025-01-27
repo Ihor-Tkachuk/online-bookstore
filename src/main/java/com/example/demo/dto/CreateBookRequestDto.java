@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Data;
@@ -8,19 +9,19 @@ import lombok.NonNull;
 
 @Data
 public class CreateBookRequestDto {
-    @NonNull
+    @NotBlank
     private String title;
-    @NonNull
+    @NotBlank
     private String author;
-    @NonNull
-    @Size(min = 13, max = 13, message = "The ISBN code must be exactly 13 characters")
+    @NotBlank
+    @Size(min = 13, max = 13)
     private String isbn;
     @NonNull
     @Min(0)
     private BigDecimal price;
-    @NonNull
-    @Size(max = 20, message = "The description should not exceed 20 characters.")
+    @NotBlank
+    @Size(max = 20)
     private String description;
-    @NonNull
+    @NotBlank
     private String coverImage;
 }
