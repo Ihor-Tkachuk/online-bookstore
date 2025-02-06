@@ -1,6 +1,7 @@
 package com.example.demo.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.time.LocalDateTime;
@@ -51,5 +52,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(TIMESTAMP, LocalDateTime.now());
         body.put(ERRORS, ex.getMessage());
         return new ResponseEntity<>(body, NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataProcessingException.class)
+    public ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(ERRORS, ex.getMessage());
+        return new ResponseEntity<>(body, INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(ERRORS, ex.getMessage());
+        return new ResponseEntity<>(body, BAD_REQUEST);
     }
 }
