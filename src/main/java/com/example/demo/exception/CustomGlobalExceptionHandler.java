@@ -1,6 +1,8 @@
 package com.example.demo.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.time.LocalDateTime;
@@ -29,13 +31,10 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put(TIMESTAMP, LocalDateTime.now());
         List<Object> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
                 .toList();
-        body.put(ERRORS, errors);
-        return new ResponseEntity<>(body, headers, BAD_REQUEST);
+        return buildResponseEntity(errors, headers, BAD_REQUEST);
     }
 
     private Object getErrorMessage(ObjectError e) {
@@ -47,9 +46,31 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return buildResponseEntity(ex.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataProcessingException.class)
+    public ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
+        return buildResponseEntity(ex.getMessage(), INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        return buildResponseEntity(ex.getMessage(), CONFLICT);
+    }
+
+    private ResponseEntity<Object> buildResponseEntity(Object errors, HttpStatusCode status) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
-        body.put(ERRORS, ex.getMessage());
-        return new ResponseEntity<>(body, NOT_FOUND);
+        body.put(ERRORS, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    private ResponseEntity<Object> buildResponseEntity(Object errors, HttpHeaders headers,
+                                                       HttpStatusCode status) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(ERRORS, errors);
+        return new ResponseEntity<>(body, headers, status);
     }
 }
