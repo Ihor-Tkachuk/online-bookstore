@@ -1,6 +1,7 @@
 package com.example.demo.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -67,6 +68,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
         body.put(ERRORS, ex.getMessage());
-        return new ResponseEntity<>(body, BAD_REQUEST);
+        return new ResponseEntity<>(body, CONFLICT);
     }
 }
