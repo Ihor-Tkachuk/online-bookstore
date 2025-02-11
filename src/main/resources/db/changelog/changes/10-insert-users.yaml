@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10-insert-users
+      author: admin27
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@example.com
+              - column:
+                  name: password
+                  value: $2a$10$7Y/B1J5jiX9ZB.zYtrcQEOp80uD1FiMeBD48z9glYQGxMQhUmPykq  # bcrypt hashed 'adminpassword'
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: User
+              - column:
+                  name: is_deleted
+                  valueBoolean: false

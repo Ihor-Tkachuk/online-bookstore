@@ -12,6 +12,7 @@ import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,6 +58,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
         return buildResponseEntity(ex.getMessage(), CONFLICT);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Object> usernameNotFoundException(UsernameNotFoundException ex) {
+        return buildResponseEntity(ex.getMessage(), NOT_FOUND);
     }
 
     private ResponseEntity<Object> buildResponseEntity(Object errors, HttpStatusCode status) {
