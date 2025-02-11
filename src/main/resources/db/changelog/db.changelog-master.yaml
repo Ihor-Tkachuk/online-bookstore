@@ -12,9 +12,7 @@ databaseChangeLog:
   - include:
        file: db/changelog/changes/06-insert-roles.yaml
   - include:
-        file: db/changelog/changes/07-create-user-roles-table.yaml
-  - include:
-      file: db/changelog/changes/08-add-foreign-keys.yaml
+        file: db/changelog/changes/07-create-user-roles-table-and-add-foreign-keys.yaml
   - include:
         file: db/changelog/changes/09-assign-role.yaml
   - include:
