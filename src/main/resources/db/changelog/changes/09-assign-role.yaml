@@ -4,9 +4,9 @@ databaseChangeLog:
       author: admin27
       preConditions:
         - onFail: CONTINUE
-        - sqlCheck:
-            expectedResult: 4
-            sql: SELECT COUNT(*) FROM users WHERE id IN (1, 2, 3, 4)
+        - not:
+            tableExists:
+              tableName: user_roles
       changes:
         - insert:
             tableName: user_roles
@@ -16,7 +16,7 @@ databaseChangeLog:
                   valueNumeric: 1
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='ADMIN')
+                  valueNumeric: 1
         - insert:
             tableName: user_roles
             columns:
@@ -25,7 +25,7 @@ databaseChangeLog:
                   valueNumeric: 2
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='USER')
+                  valueNumeric: 2
         - insert:
             tableName: user_roles
             columns:
@@ -34,7 +34,7 @@ databaseChangeLog:
                   valueNumeric: 3
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='USER')
+                  valueNumeric: 2
         - insert:
             tableName: user_roles
             columns:
@@ -43,4 +43,4 @@ databaseChangeLog:
                   valueNumeric: 4
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='USER')
+                  valueNumeric: 2

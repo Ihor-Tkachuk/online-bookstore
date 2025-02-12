@@ -4,9 +4,9 @@ databaseChangeLog:
       author: admin27
       preConditions:
         - onFail: CONTINUE
-        - sqlCheck:
-            expectedResult: 2
-            sql: SELECT COUNT(*) FROM roles WHERE id IN (5, 6)
+        - not:
+            tableExists:
+              tableName: user_roles
       changes:
         - insert:
             tableName: user_roles
@@ -16,7 +16,7 @@ databaseChangeLog:
                   valueNumeric: 5
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='USER')
+                  valueNumeric: 2
         - insert:
             tableName: user_roles
             columns:
@@ -25,4 +25,4 @@ databaseChangeLog:
                   valueNumeric: 6
               - column:
                   name: role_id
-                  valueComputed: (SELECT id FROM roles WHERE name='ADMIN')
+                  valueNumeric: 1
