@@ -3,3 +3,17 @@ databaseChangeLog:
       file: db/changelog/changes/01-create-books-table.yaml
   - include:
       file: db/changelog/changes/02-create-users-table.yaml
+  - include:
+      file: db/changelog/changes/05-create-roles-table.yaml
+  - include:
+       file: db/changelog/changes/06-insert-roles.yaml
+  - include:
+        file: db/changelog/changes/07-create-users-roles-table-and-add-foreign-keys.yaml
+  - include:
+        file: db/changelog/changes/09-assign-role.yaml
+  - include:
+      file: db/changelog/changes/10-insert-users.yaml
+  - include:
+      file: db/changelog/changes/11-assign-roles-to-users.yaml
+  - include:
+      file: db/changelog/changes/12-update-roles-to-add-prefix.yaml

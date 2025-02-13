@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12-update-roles-to-add-prefix
+      author: admin27
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            columnExists:
+              tableName: roles
+              columnName: name
+      changes:
+        - update:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_ADMIN
+            where: name = 'ADMIN'
+        - update:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_USER
+            where: name = 'USER'

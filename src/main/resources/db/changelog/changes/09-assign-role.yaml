@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09-assign-role
+      author: admin27
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            tableExists:
+              tableName: users_roles
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: role_id
+                  valueNumeric: 2
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 3
+              - column:
+                  name: role_id
+                  valueNumeric: 2
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 4
+              - column:
+                  name: role_id
+                  valueNumeric: 2
