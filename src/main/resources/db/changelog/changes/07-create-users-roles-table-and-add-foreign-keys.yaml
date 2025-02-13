@@ -1,21 +1,21 @@
 databaseChangeLog:
   - changeSet:
-      id: 07-create-user-roles-table-and-add-foreign-keys
+      id: 07-create-users-roles-table-and-add-foreign-keys
       author: admin27
       preConditions:
         - onFail: CONTINUE
         - not:
             tableExists:
-              tableName: user_roles
+              tableName: users_roles
         - not:
             foreignKeyConstraintExists:
-              foreignKeyName: fk_user_roles_user
+              foreignKeyName: fk_users_roles_user
         - not:
             foreignKeyConstraintExists:
-              foreignKeyName: fk_user_roles_role
+              foreignKeyName: fk_users_roles_role
       changes:
         - createTable:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column:
                   name: user_id
@@ -30,15 +30,15 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: user_roles
+            baseTableName: users_roles
             baseColumnNames: user_id
-            constraintName: fk_user_roles_user
+            constraintName: fk_users_roles_user
             referencedTableName: users
             referencedColumnNames: id
         - addForeignKeyConstraint:
-            baseTableName: user_roles
+            baseTableName: users_roles
             baseColumnNames: role_id
-            constraintName: fk_user_roles_role
+            constraintName: fk_users_roles_role
             referencedTableName: roles
             referencedColumnNames: id
 

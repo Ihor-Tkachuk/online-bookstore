@@ -6,10 +6,10 @@ databaseChangeLog:
         - onFail: CONTINUE
         - not:
             tableExists:
-              tableName: user_roles
+              tableName: users_roles
       changes:
         - insert:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column:
                   name: user_id
@@ -18,7 +18,7 @@ databaseChangeLog:
                   name: role_id
                   valueNumeric: 2
         - insert:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column:
                   name: user_id
