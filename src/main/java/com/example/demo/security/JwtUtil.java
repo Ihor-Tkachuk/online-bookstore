@@ -19,9 +19,6 @@ public class JwtUtil {
 
     public JwtUtil(@Value("${jwt.secret}") String secretString,
                    @Value("${jwt.expiration}") long expiration) {
-        if (secretString.length() < 32) {
-            throw new IllegalArgumentException("Secret key must be at least 32 characters long");
-        }
         this.secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
         this.expiration = expiration;
     }
