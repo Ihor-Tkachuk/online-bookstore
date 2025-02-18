@@ -31,10 +31,8 @@ public class BookServiceImpl implements BookService {
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
 
-        Set<Category> categories = requestDto.getCategoryIds().stream()
-                .map(categoryId -> categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new RuntimeException("Category not found")))
-                .collect(Collectors.toSet());
+        Set<Category> categories = mapCategoryIdsToCategories(
+                requestDto.getCategoryIds());
         book.setCategories(categories);
 
         return bookMapper.toDto(bookRepository.save(book));
@@ -66,10 +64,8 @@ public class BookServiceImpl implements BookService {
                 () -> new EntityNotFoundException("Can't get book by id " + id));
         bookMapper.updateBook(book, requestDto);
 
-        Set<Category> categories = requestDto.getCategoryIds().stream()
-                .map(categoryId -> categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new RuntimeException("Category not found")))
-                .collect(Collectors.toSet());
+        Set<Category> categories = mapCategoryIdsToCategories(
+                requestDto.getCategoryIds());
         book.setCategories(categories);
 
         return bookMapper.toDto(bookRepository.save(book));
@@ -88,5 +84,12 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllByCategoryId(categoryId, pageable).stream()
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
+    }
+
+    public Set<Category> mapCategoryIdsToCategories(List<Long> categoryIds) {
+        return categoryIds.stream()
+                .map(categoryId -> categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new EntityNotFoundException("Category not found")))
+                .collect(Collectors.toSet());
     }
 }
