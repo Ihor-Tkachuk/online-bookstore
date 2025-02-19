@@ -7,8 +7,8 @@ import com.example.demo.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +33,7 @@ public class BookController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all books",
             description = "Get a list of all available books")
-    public List<BookDto> getAll(Pageable pageable) {
+    public Page<BookDto> getAll(Pageable pageable) {
         return bookService.getAll(pageable);
     }
 
@@ -76,7 +76,7 @@ public class BookController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Search a book by parameters",
             description = "Search a book by parameters")
-    public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
+    public Page<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }
 }

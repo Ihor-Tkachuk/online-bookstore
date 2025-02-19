@@ -41,4 +41,3 @@ databaseChangeLog:
             constraintName: fk_users_roles_role
             referencedTableName: roles
             referencedColumnNames: id
-
