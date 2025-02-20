@@ -1,43 +1,45 @@
 databaseChangeLog:
   - changeSet:
-      id: 07-create-users-roles-table-and-add-foreign-keys
+      id: 14-create-books-categories-table
       author: admin27
       preConditions:
         - onFail: CONTINUE
         - not:
             tableExists:
-              tableName: users_roles
+              tableName: books_categories
         - not:
             foreignKeyConstraintExists:
-              foreignKeyName: fk_users_roles_user
+              foreignKeyName: fk_books_categories_book
         - not:
             foreignKeyConstraintExists:
-              foreignKeyName: fk_users_roles_role
+              foreignKeyName: fk_books_categories_category
       changes:
         - createTable:
-            tableName: users_roles
+            tableName: books_categories
             columns:
               - column:
-                  name: user_id
+                  name: book_id
                   type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: role_id
+                  name: category_id
                   type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: users_roles
-            baseColumnNames: user_id
-            constraintName: fk_users_roles_user
-            referencedTableName: users
+            baseTableName: books_categories
+            baseColumnNames: book_id
+            constraintName: fk_books_categories_book
+            referencedTableName: books
             referencedColumnNames: id
+            onDelete: CASCADE
         - addForeignKeyConstraint:
-            baseTableName: users_roles
-            baseColumnNames: role_id
-            constraintName: fk_users_roles_role
-            referencedTableName: roles
+            baseTableName: books_categories
+            baseColumnNames: category_id
+            constraintName: fk_books_categories_category
+            referencedTableName: categories
             referencedColumnNames: id
+            onDelete: CASCADE

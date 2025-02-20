@@ -17,3 +17,7 @@ databaseChangeLog:
       file: db/changelog/changes/11-assign-roles-to-users.yaml
   - include:
       file: db/changelog/changes/12-update-roles-to-add-prefix.yaml
+  - include:
+      file: db/changelog/changes/13-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/14-create-books-categories-table.yaml
