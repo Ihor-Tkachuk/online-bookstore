@@ -87,7 +87,8 @@ public class BookServiceImpl implements BookService {
     public Set<Category> mapCategoryIdsToCategories(List<Long> categoryIds) {
         return categoryIds.stream()
                 .map(categoryId -> categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new EntityNotFoundException("Category not found")))
+                        .orElseThrow(() -> new EntityNotFoundException("Category not found by id: "
+                                + categoryId)))
                 .collect(Collectors.toSet());
     }
 }
