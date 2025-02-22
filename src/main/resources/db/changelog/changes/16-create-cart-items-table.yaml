@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16-create-cart-items-table
+      author: admin27
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            tableExists:
+              tableName: cart_items
+      changes:
+        - createTable:
+            tableName: cart_items
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: shopping_cart_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: shopping_cart_id
+            referencedTableName: shopping_carts
+            referencedColumnNames: id
+            constraintName: fk_cart_items_shopping_cart
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: book_id
+            referencedTableName: books
+            referencedColumnNames: id
+            constraintName: fk_cart_items_book
