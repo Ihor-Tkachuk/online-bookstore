@@ -4,7 +4,6 @@ import com.example.demo.dto.cartitem.CreateCartItemRequestDto;
 import com.example.demo.dto.cartitem.UpdateCartItemRequestDto;
 import com.example.demo.dto.shoppingcart.ShoppingCartResponseDto;
 import com.example.demo.model.User;
-import com.example.demo.security.AuthenticationService;
 import com.example.demo.service.shoppingcart.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
