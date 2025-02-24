@@ -1,20 +1,18 @@
 package com.example.demo.service.shoppingcart;
 
-import com.example.demo.dto.cartitem.CartItemResponseDto;
 import com.example.demo.dto.cartitem.CreateCartItemRequestDto;
 import com.example.demo.dto.cartitem.UpdateCartItemRequestDto;
 import com.example.demo.dto.shoppingcart.ShoppingCartResponseDto;
-import com.example.demo.model.ShoppingCart;
 
 public interface ShoppingCartService {
-    CartItemResponseDto addCartItem(ShoppingCart shoppingCart, CreateCartItemRequestDto requestDto);
+    ShoppingCartResponseDto addCartItem(Long userId, CreateCartItemRequestDto requestDto);
 
-    ShoppingCart getOrCreateShoppingCart(Long userId);
+    void createUsersCart(Long userId);
 
-    ShoppingCartResponseDto getShoppingCart(Long userId);
+    ShoppingCartResponseDto getUsersCart(Long userId);
 
-    CartItemResponseDto updateCartItemQuantity(Long cartItemId,
-                                               UpdateCartItemRequestDto requestDto);
+    ShoppingCartResponseDto updateCartItemQuantity(Long cartItemId,
+                                                   UpdateCartItemRequestDto requestDto);
 
     void removeCartItem(Long cartItemId);
 }

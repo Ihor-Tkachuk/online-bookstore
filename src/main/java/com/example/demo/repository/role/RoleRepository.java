@@ -1,7 +1,8 @@
 package com.example.demo.repository.role;
 
-import com.example.demo.model.User;
+import com.example.demo.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends JpaRepository<User, Long> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
+    Role findByName(Role.RoleName name);
 }

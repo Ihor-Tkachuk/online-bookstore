@@ -1,6 +1,7 @@
 package com.example.demo.dto.user;
 
 import com.example.demo.annotation.FieldMatch;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.Data;
         message = "The password fields must match")
 public class UserRegistrationRequestDto {
     @NotBlank
+    @Size(min = 8, max = 50)
+    @Email
     private String email;
 
     @NotBlank
