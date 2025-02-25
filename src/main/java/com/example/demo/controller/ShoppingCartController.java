@@ -59,10 +59,12 @@ public class ShoppingCartController {
     @Operation(summary = "Update quantity of a book",
             description = "Update quantity of a book in the shopping cart")
     public ShoppingCartResponseDto updateCartItemQuantity(
+            Authentication authentication,
             @PathVariable Long cartItemId,
             @RequestBody @Valid UpdateCartItemRequestDto requestDto) {
+        User user = (User) authentication.getPrincipal();
 
-        return shoppingCartService.updateCartItemQuantity(cartItemId, requestDto);
+        return shoppingCartService.updateCartItemQuantity(user, cartItemId, requestDto);
     }
 
     @DeleteMapping("/items/{cartItemId}")

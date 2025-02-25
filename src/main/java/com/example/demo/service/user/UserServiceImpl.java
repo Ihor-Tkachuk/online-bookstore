@@ -9,6 +9,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.role.RoleRepository;
 import com.example.demo.repository.user.UserRepository;
 import com.example.demo.service.shoppingcart.ShoppingCartService;
+import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
+    @Transactional
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.existsByEmail(requestDto.getEmail())) {
@@ -38,8 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(Collections.singleton(roleUser)));
 
         userRepository.save(user);
-
-        shoppingCartService.createUsersCart(user.getId());
+        shoppingCartService.createUsersCart(user);
 
         return userMapper.toResponseDto(user);
     }
