@@ -5,6 +5,7 @@ import com.example.demo.dto.order.OrderResponseDto;
 import com.example.demo.dto.order.UpdateOrderStatusRequestDto;
 import com.example.demo.dto.orderitem.OrderItemResponseDto;
 import com.example.demo.exception.EntityNotFoundException;
+import com.example.demo.exception.OrderProcessingException;
 import com.example.demo.mapper.OrderItemMapper;
 import com.example.demo.mapper.OrderMapper;
 import com.example.demo.model.Book;
@@ -23,12 +24,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository shoppingCartRepository;
@@ -39,13 +38,12 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    @Transactional
     public OrderResponseDto addOrder(User user, CreateOrderRequestDto requestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId());
         if (shoppingCart.getCartItems().isEmpty()) {
-            throw new RuntimeException(
+            throw new OrderProcessingException(
                     "The order cannot be formed because the shopping cart with ID "
-                            + user.getId() + " is empty");
+                            + shoppingCart.getId() + " is empty");
         }
 
         Order order = new Order();
@@ -54,9 +52,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setShippingAddress(requestDto.getShippingAddress());
         order.setTotal(BigDecimal.ZERO);
-        System.out.println("Order before save: " + order);
         orderRepository.save(order);
-        System.out.println("Order after save: " + order);
 
         Set<OrderItem> orderItems = shoppingCart.getCartItems().stream()
                 .map(cartItem -> {
@@ -69,7 +65,6 @@ public class OrderServiceImpl implements OrderService {
                     orderItem.setBook(book);
                     orderItem.setQuantity(cartItem.getQuantity());
                     orderItem.setPrice(book.getPrice());
-                    //orderItemRepository.save(orderItem);
                     return orderItem;
                 }).collect(Collectors.toSet());
         orderItemRepository.saveAll(orderItems);
@@ -90,7 +85,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public List<OrderResponseDto> getAll(User user) {
         return orderRepository.findAllByUserId(user.getId()).stream()
                 .map(orderMapper::toOrderResponseDto)
@@ -98,19 +92,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderItemResponseDto> getOrderItemsByOrderId(
-            User user, Long orderId, Pageable pageable) {
-        Order order = orderRepository.findById(orderId)
+    public List<OrderItemResponseDto> getOrderItemsByOrderId(
+            User user, Long orderId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, user.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found by ID: " + orderId));
+                        "Order not found by ID: " + orderId
+                                + " for user with ID: " + user.getId()));
 
-        if (!order.getUser().getId().equals(user.getId())) {
-            throw new AccessDeniedException("This order does not belong to the user with ID: "
-                    + user.getId());
-        }
-
-        return orderItemRepository.findAllByOrderId(orderId, pageable)
-                .map(orderItemMapper::toOrderItemResponseDto);
+        return orderItemRepository.findAllByOrderId(orderId).stream()
+                .map(orderItemMapper::toOrderItemResponseDto)
+                .toList();
     }
 
     @Override

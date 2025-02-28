@@ -8,4 +8,3 @@ public class CreateOrderRequestDto {
     @NotBlank(message = "Shipping address cannot be blank")
     private String shippingAddress;
 }
-

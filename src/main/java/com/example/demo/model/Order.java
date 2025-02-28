@@ -15,8 +15,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -36,7 +36,7 @@ public class Order {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -52,10 +52,9 @@ public class Order {
     @Column(nullable = false)
     private String shippingAddress;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<OrderItem> orderItems;
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
@@ -67,4 +66,3 @@ public class Order {
         CANCELLED
     }
 }
-

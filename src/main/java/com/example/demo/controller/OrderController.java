@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -41,7 +39,6 @@ public class OrderController {
     public OrderResponseDto createOrder(Authentication authentication,
                                         @RequestBody @Valid CreateOrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
-
         return orderService.addOrder(user, requestDto);
     }
 
@@ -51,7 +48,6 @@ public class OrderController {
             description = "Retrieve user's order history")
     public List<OrderResponseDto> getOrders(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-
         return orderService.getAll(user);
     }
 
@@ -59,12 +55,10 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Retrieve all OrderItems for a specific order",
             description = "Retrieve all OrderItems for a specific order")
-    public Page<OrderItemResponseDto> getOrderItems(Authentication authentication,
-                                                    @PathVariable Long orderId,
-                                                    Pageable pageable) {
+    public List<OrderItemResponseDto> getOrderItems(Authentication authentication,
+                                                    @PathVariable Long orderId) {
         User user = (User) authentication.getPrincipal();
-
-        return orderService.getOrderItemsByOrderId(user, orderId, pageable);
+        return orderService.getOrderItemsByOrderId(user, orderId);
     }
 
     @GetMapping("/{orderId}/items/{id}")
@@ -75,7 +69,6 @@ public class OrderController {
                                              @PathVariable Long orderId,
                                              @PathVariable Long id) {
         User user = (User) authentication.getPrincipal();
-
         return orderService.getOrderItemById(user, orderId, id);
     }
 
@@ -88,7 +81,6 @@ public class OrderController {
                                               @RequestBody
                                                   @Valid UpdateOrderStatusRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
-
         return orderService.updateOrderStatus(user, id, requestDto);
     }
 }

@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -57,6 +58,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
         return buildResponseEntity(ex.getMessage(), CONFLICT);
+    }
+
+    @ExceptionHandler(OrderProcessingException.class)
+    public ResponseEntity<Object> handleRegistrationException(OrderProcessingException ex) {
+        return buildResponseEntity(ex.getMessage(), NO_CONTENT);
     }
 
     private ResponseEntity<Object> buildResponseEntity(Object errors, HttpStatusCode status) {
