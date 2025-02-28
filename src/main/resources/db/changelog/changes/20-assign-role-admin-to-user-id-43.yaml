@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20-assign-role-admin-to-user-id-43
+      author: admin27
+      preConditions:
+        - onFail: CONTINUE
+        - not:
+            tableExists:
+              tableName: users_roles
+              where: "user_id = 43 AND role_id = 6"
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 43
+              - column:
+                  name: role_id
+                  valueNumeric: 6
+
