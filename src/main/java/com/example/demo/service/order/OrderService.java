@@ -6,11 +6,13 @@ import com.example.demo.dto.order.UpdateOrderStatusRequestDto;
 import com.example.demo.dto.orderitem.OrderItemResponseDto;
 import com.example.demo.model.User;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
     OrderResponseDto addOrder(User user, CreateOrderRequestDto requestDto);
 
-    List<OrderResponseDto> getAll(User user);
+    Page<OrderResponseDto> getAll(User user, Pageable pageable);
 
     List<OrderItemResponseDto> getOrderItemsByOrderId(User user, Long orderId);
 
