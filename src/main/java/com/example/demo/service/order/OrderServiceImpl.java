@@ -42,17 +42,54 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto addOrder(User user, CreateOrderRequestDto requestDto) {
         ShoppingCart shoppingCart = getUsersShoppingCart(user);
-
         Order order = createUsersOrder(user, requestDto);
-
         getOrderItemsAndSetToOrder(shoppingCart, order);
-
         orderRepository.save(order);
-
         shoppingCart.getCartItems().clear();
         shoppingCartRepository.save(shoppingCart);
-
         return orderMapper.toOrderResponseDto(order);
+    }
+
+    @Override
+    public Page<OrderResponseDto> getAll(User user, Pageable pageable) {
+        return orderRepository.findAllByUserId(user.getId(), pageable)
+                .map(orderMapper::toOrderResponseDto);
+    }
+
+    @Override
+    public List<OrderItemResponseDto> getOrderItemsByOrderId(
+            User user, Long orderId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order not found by ID: " + orderId
+                                + " for user with ID: " + user.getId()));
+
+        return orderItemRepository.findAllByOrderId(orderId).stream()
+                .map(orderItemMapper::toOrderItemResponseDto)
+                .toList();
+    }
+
+    @Override
+    public OrderItemResponseDto getOrderItemById(User user, Long orderId, Long id) {
+        OrderItem orderItem = orderItemRepository
+                .findByIdAndOrderIdAndUserId(id, orderId, user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order item not found with ID: " + id
+                                + " for order with ID: " + orderId
+                                + " of user with ID: " + user.getId()));
+
+        return orderItemMapper.toOrderItemResponseDto(orderItem);
+    }
+
+    @Override
+    public OrderResponseDto updateOrderStatus(
+            User user, Long id, UpdateOrderStatusRequestDto requestDto) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Order not found by ID: " + id));
+        order.setStatus(requestDto.getStatus());
+
+        return orderMapper.toOrderResponseDto(orderRepository.save(order));
     }
 
     private void getOrderItemsAndSetToOrder(ShoppingCart shoppingCart, Order order) {
@@ -98,47 +135,5 @@ public class OrderServiceImpl implements OrderService {
                             + shoppingCart.getId() + " is empty");
         }
         return shoppingCart;
-    }
-
-    @Override
-    public Page<OrderResponseDto> getAll(User user, Pageable pageable) {
-        return orderRepository.findAllByUserId(user.getId(), pageable)
-                .map(orderMapper::toOrderResponseDto);
-    }
-
-    @Override
-    public List<OrderItemResponseDto> getOrderItemsByOrderId(
-            User user, Long orderId) {
-        Order order = orderRepository.findByIdAndUserId(orderId, user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found by ID: " + orderId
-                                + " for user with ID: " + user.getId()));
-
-        return orderItemRepository.findAllByOrderId(orderId).stream()
-                .map(orderItemMapper::toOrderItemResponseDto)
-                .toList();
-    }
-
-    @Override
-    public OrderItemResponseDto getOrderItemById(User user, Long orderId, Long id) {
-        OrderItem orderItem = orderItemRepository
-                .findByIdAndOrderIdAndUserId(id, orderId, user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order item not found with ID: " + id
-                                + " for order with ID: " + orderId
-                                + " of user with ID: " + user.getId()));
-
-        return orderItemMapper.toOrderItemResponseDto(orderItem);
-    }
-
-    @Override
-    public OrderResponseDto updateOrderStatus(
-            User user, Long id, UpdateOrderStatusRequestDto requestDto) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found by ID: " + id));
-        order.setStatus(requestDto.getStatus());
-
-        return orderMapper.toOrderResponseDto(orderRepository.save(order));
     }
 }
