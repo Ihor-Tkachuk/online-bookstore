@@ -14,7 +14,6 @@ import com.example.demo.model.User;
 import com.example.demo.repository.book.BookRepository;
 import com.example.demo.repository.cartitem.CartItemRepository;
 import com.example.demo.repository.shoppingcart.ShoppingCartRepository;
-import com.example.demo.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
     private final BookMapper bookMapper;
